@@ -7,6 +7,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 import express from 'express';
+import messageRouter from './routes/messageRoutes.js';
 import morgan from 'morgan';
 import notFoundMiddleware from './middleware/notFoundMiddleware.js';
 
@@ -27,6 +28,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/message', authenticateUser, messageRouter);
 
 // middleware
 app.use(notFoundMiddleware);

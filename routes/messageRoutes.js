@@ -1,16 +1,15 @@
 import {
   createMessage,
   deleteMessage,
-  getAllMessages,
   getMessageByUser,
-} from '../controller/chatController';
+} from '../controller/messageController.js';
 
 import express from 'express';
 
 const messageRouter = express.Router();
 
-messageRouter.route('/').get(getAllMessages).post(createMessage);
-messageRouter.route('/user/:id').get(getMessageByUser);
+messageRouter.route('/').get(getMessageByUser);
+messageRouter.route('/new').post(createMessage);
 messageRouter.route('/:id').delete(deleteMessage);
 
 export default messageRouter;
