@@ -1,4 +1,5 @@
-import { BadRequestError } from '../errors/index.js';
+import { BadRequestError, UnAuthenticatedError } from '../errors/index.js';
+
 import { StatusCodes } from 'http-status-codes';
 import Users from '../models/User.js';
 
@@ -33,7 +34,11 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) throw new BadRequestError('Missing required fields');
 
-  const user = await Users.findOne({ email }).select('+password');
+  // retrieve user from db
+  const user = await Users.findOne({ email })
+    .select('+password')
+    .populate('soulmate');
+
   if (!user) throw new UnauthorizedError('Invalid credentials');
 
   const isValidPassword = await user.comparePassword(password);
@@ -43,35 +48,51 @@ const login = async (req, res) => {
 
   res.status(StatusCodes.OK).json({
     user: {
+      _id: user._id,
       name: user.name,
       email: user.email,
       lastName: user.lastName,
+      soulmate: user.soulmate,
     },
     token,
   });
 };
 
-// set up update user controller
+// set up update user controller only update soulmate
 const updateUser = async (req, res) => {
-  const { email, name, lastName } = req.body;
+  const { email } = req.body;
 
-  if (!email || !name || !lastName)
-    throw new BadRequestError('Missing required fields');
+  if (!email) throw new BadRequestError('Missing required fields');
 
   const user = await Users.findOne({ _id: req.user.userId });
+  if (user.email === email)
+    throw new BadRequestError('You cannot link your own email');
 
-  user.email = email;
-  user.name = name;
-  user.lastName = lastName;
+  const soulmateUser = await Users.findOne({ email });
+
+  soulmateUser.soulmate = user._id;
+  user.soulmate = soulmateUser._id;
 
   await user.save();
+  await soulmateUser.save();
 
   const token = user.createJWT();
 
   res.status(StatusCodes.OK).json({
     user,
+    soulmateUser,
     token,
   });
 };
 
-export { register, login, updateUser };
+const autoLogin = async (req, res) => {
+  const user = await Users.findOne({ _id: req.user.userId }).populate(
+    'soulmate'
+  );
+
+  res.status(StatusCodes.OK).json({
+    user,
+  });
+};
+
+export { register, login, updateUser, autoLogin };

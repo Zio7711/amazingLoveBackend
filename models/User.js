@@ -42,6 +42,12 @@ const UserSchema = new mongoose.Schema({
     maxlength: [20, 'Location must be less than 20 characters'],
     default: 'location',
   },
+
+  soulmate: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    trim: true,
+  },
 });
 
 UserSchema.pre('save', async function () {

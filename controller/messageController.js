@@ -26,7 +26,7 @@ const getMessageByUser = async (req, res) => {
   // find all messages where userId is either sender or receiver
   const messages = await Messages.find({
     $or: [{ sender: userId }, { receiver: userId }],
-  });
+  }).sort({ createdAt: -1 });
 
   res.status(StatusCodes.OK).json({ messages });
 };
