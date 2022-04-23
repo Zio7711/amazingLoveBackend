@@ -1,10 +1,5 @@
 import 'express-async-errors';
 
-import {
-  socketOnConnection,
-  socketOnDisconnection,
-} from './websocket/initializeSocket.js';
-
 import { Server } from 'socket.io';
 import authRouter from './routes/authRoutes.js';
 import authenticateUser from './middleware/auth.js';
@@ -17,6 +12,7 @@ import http from 'http';
 import messageRouter from './routes/messageRoutes.js';
 import morgan from 'morgan';
 import notFoundMiddleware from './middleware/notFoundMiddleware.js';
+import { socketOnConnection } from './websocket/initializeSocket.js';
 import userRouter from './routes/userRoutes.js';
 
 export const app = express();
@@ -65,4 +61,4 @@ start();
 // socket.io functions
 
 socketOnConnection(io);
-socketOnDisconnection(io);
+// socketOnDisconnection(io);

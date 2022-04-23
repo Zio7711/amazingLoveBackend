@@ -19,6 +19,11 @@ const MessageSchema = new mongoose.Schema(
       required: [true, 'Content is required'],
       trim: true,
     },
+
+    couple: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Couple',
+    },
   },
   { timestamps: true }
 );

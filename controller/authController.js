@@ -1,5 +1,6 @@
 import { BadRequestError, UnAuthenticatedError } from '../errors/index.js';
 
+import Couples from '../models/Couple.js';
 import { StatusCodes } from 'http-status-codes';
 import Users from '../models/User.js';
 
@@ -76,9 +77,15 @@ const updateUser = async (req, res) => {
   await user.save();
   await soulmateUser.save();
 
+  // link this couple save to the Couple model
+  await Couples.create({
+    girlfriend: user._id,
+    boyfriend: soulmateUser._id,
+  });
+
   const token = user.createJWT();
 
-  res.status(StatusCodes.OK).json({
+  res.status(StatusCodes.CREATED).json({
     user,
     soulmateUser,
     token,
