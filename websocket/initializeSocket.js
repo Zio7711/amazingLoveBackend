@@ -1,15 +1,15 @@
-import { listenToMessageSocket } from './messageSocket.js';
+import { listenToMessageSocket } from "./messageSocket.js";
 
 // function for listening to the socket connection
 export const socketOnConnection = (io) => {
-  io.on('connection', (socket) => {
-    console.log('a user connected ' + socket.id);
-    socket.emit('hello', 'message from server');
+  io.on("connection", (socket) => {
+    console.log("a user connected " + socket.id);
+    socket.emit("hello", "message from server");
 
     listenToMessageSocket(socket);
 
-    socket.on('disconnect', () => {
-      console.log('user disconnected ', socket.id);
+    socket.on("disconnect", () => {
+      console.log("user disconnected ", socket.id);
     });
   });
 };
