@@ -3,6 +3,7 @@ import 'express-async-errors';
 import { Server } from 'socket.io';
 import authRouter from './routes/authRoutes.js';
 import authenticateUser from './middleware/auth.js';
+import bucketListItemRouter from './routes/buckListItemRoutes.js';
 import connectDB from './db/connect.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -36,6 +37,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/message', authenticateUser, messageRouter);
 app.use('/api/v1/user', authenticateUser, userRouter);
+app.use('/api/v1/bucketListItem', authenticateUser, bucketListItemRouter);
 
 // middleware
 app.use(notFoundMiddleware);

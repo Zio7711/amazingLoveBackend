@@ -12,6 +12,13 @@ const CoupleSchema = new mongoose.Schema({
     ref: 'User',
     unique: true,
   },
+
+  bucketList: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'BucketListItem',
+    },
+  ],
 });
 
 export default mongoose.model('Couple', CoupleSchema);
