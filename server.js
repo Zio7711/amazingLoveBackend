@@ -18,7 +18,12 @@ import userRouter from './routes/userRoutes.js';
 
 export const app = express();
 export const server = http.createServer(app);
-export const io = new Server(server);
+export const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  },
+});
 
 dotenv.config();
 

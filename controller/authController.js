@@ -1,19 +1,19 @@
-import { BadRequestError, UnAuthenticatedError } from '../errors/index.js';
+import { BadRequestError, UnAuthenticatedError } from "../errors/index.js";
 
-import Couples from '../models/Couple.js';
-import { StatusCodes } from 'http-status-codes';
-import Users from '../models/User.js';
+import Couples from "../models/Couple.js";
+import { StatusCodes } from "http-status-codes";
+import Users from "../models/User.js";
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
-    throw new BadRequestError('Missing required fields');
+    throw new BadRequestError("Missing required fields");
   }
 
   const userAlreadyExist = await Users.findOne({ email });
 
   if (userAlreadyExist) {
-    throw new BadRequestError('Email already exists');
+    throw new BadRequestError("Email already exists");
   }
 
   const user = await Users.create({ name, email, password });
@@ -33,17 +33,17 @@ const register = async (req, res) => {
 // setup login controller
 const login = async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) throw new BadRequestError('Missing required fields');
+  if (!email || !password) throw new BadRequestError("Missing required fields");
 
   // retrieve user from db
   const user = await Users.findOne({ email })
-    .select('+password')
-    .populate('soulmate');
+    .select("+password")
+    .populate("soulmate");
 
-  if (!user) throw new UnauthorizedError('Invalid credentials');
+  if (!user) throw new UnAuthenticatedError("Invalid credentials");
 
   const isValidPassword = await user.comparePassword(password);
-  if (!isValidPassword) throw new UnauthorizedError('Invalid credentials');
+  if (!isValidPassword) throw new UnauthorizedError("Invalid credentials");
 
   const token = user.createJWT();
 
@@ -63,11 +63,11 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
   const { email } = req.body;
 
-  if (!email) throw new BadRequestError('Missing required fields');
+  if (!email) throw new BadRequestError("Missing required fields");
 
   const user = await Users.findOne({ _id: req.user.userId });
   if (user.email === email)
-    throw new BadRequestError('You cannot link your own email');
+    throw new BadRequestError("You cannot link your own email");
 
   const soulmateUser = await Users.findOne({ email });
 
@@ -94,7 +94,7 @@ const updateUser = async (req, res) => {
 
 const autoLogin = async (req, res) => {
   const user = await Users.findOne({ _id: req.user.userId }).populate(
-    'soulmate'
+    "soulmate"
   );
 
   res.status(StatusCodes.OK).json({
