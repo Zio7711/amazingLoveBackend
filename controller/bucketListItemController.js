@@ -1,9 +1,9 @@
-import BucketListItem from '../models/BucketListItem.js';
-import Couple from '../models/Couple.js';
-import { NotFoundError } from '../errors/index.js';
-import { StatusCodes } from 'http-status-codes';
+import BucketListItem from "../models/BucketListItem.js";
+import Couple from "../models/Couple.js";
+import { NotFoundError } from "../errors/index.js";
+import { StatusCodes } from "http-status-codes";
 
-const createBucketListITem = async (req, res) => {
+const createBucketListItem = async (req, res) => {
   const bucketListItem = req.body;
   console.log(bucketListItem.couple);
   const bucketListItemCreated = await BucketListItem.create(bucketListItem);
@@ -21,15 +21,15 @@ const createBucketListITem = async (req, res) => {
 
 const getAllBucketListItemsByCoupleId = async (req, res) => {
   const coupleId = req.params.coupleId;
-  const bucketListItems = await BucketListItem.find({ couple: coupleId });
+  const bucketList = await BucketListItem.find({ couple: coupleId });
 
-  if (!bucketListItems) {
-    throw new NotFoundError('BucketListItems not found');
+  if (!bucketList) {
+    throw new NotFoundError("BucketListItems not found");
   }
 
   res.status(StatusCodes.OK).json({
-    bucketListItems,
+    bucketList,
   });
 };
 
-export { createBucketListITem, getAllBucketListItemsByCoupleId };
+export { createBucketListItem, getAllBucketListItemsByCoupleId };
