@@ -1,22 +1,23 @@
-import { BadRequestError, UnAuthenticatedError } from "../errors/index.js";
+const { BadRequestError, UnAuthenticatedError } = require('../errors/index.js');
 
-import Couples from "../models/Couple.js";
-import { StatusCodes } from "http-status-codes";
-import Users from "../models/User.js";
+// const Couples = require('../models/Couple.js');
+const { StatusCodes } = require('http-status-codes');
+// const Users  = require('../models/User.js');
+const User = require('../models/user.js');
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
-    throw new BadRequestError("Missing required fields");
+    throw new BadRequestError('Missing required fields');
   }
 
-  const userAlreadyExist = await Users.findOne({ email });
+  const userAlreadyExist = await User.findOne({ email });
 
   if (userAlreadyExist) {
-    throw new BadRequestError("Email already exists");
+    throw new BadRequestError('Email already exists');
   }
 
-  const user = await Users.create({ name, email, password });
+  const user = await User.create({ name, email, password });
   const token = user.createJWT();
 
   // do not send password to the front end
@@ -33,17 +34,17 @@ const register = async (req, res) => {
 // setup login controller
 const login = async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) throw new BadRequestError("Missing required fields");
+  if (!email || !password) throw new BadRequestError('Missing required fields');
 
   // retrieve user from db
-  const user = await Users.findOne({ email })
-    .select("+password")
-    .populate("soulmate");
+  const user = await User.findOne({ email })
+    .select('+password')
+    .populate('soulmate');
 
-  if (!user) throw new UnAuthenticatedError("Invalid credentials");
+  if (!user) throw new UnAuthenticatedError('Invalid credentials');
 
   const isValidPassword = await user.comparePassword(password);
-  if (!isValidPassword) throw new UnauthorizedError("Invalid credentials");
+  if (!isValidPassword) throw new UnauthorizedError('Invalid credentials');
 
   const token = user.createJWT();
 
@@ -63,13 +64,13 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
   const { email } = req.body;
 
-  if (!email) throw new BadRequestError("Missing required fields");
+  if (!email) throw new BadRequestError('Missing required fields');
 
-  const user = await Users.findOne({ _id: req.user.userId });
+  const user = await User.findOne({ _id: req.user.userId });
   if (user.email === email)
-    throw new BadRequestError("You cannot link your own email");
+    throw new BadRequestError('You cannot link your own email');
 
-  const soulmateUser = await Users.findOne({ email });
+  const soulmateUser = await User.findOne({ email });
 
   soulmateUser.soulmate = user._id;
   user.soulmate = soulmateUser._id;
@@ -93,8 +94,8 @@ const updateUser = async (req, res) => {
 };
 
 const autoLogin = async (req, res) => {
-  const user = await Users.findOne({ _id: req.user.userId }).populate(
-    "soulmate"
+  const user = await User.findOne({ _id: req.user.userId }).populate(
+    'soulmate'
   );
 
   res.status(StatusCodes.OK).json({
@@ -102,4 +103,4 @@ const autoLogin = async (req, res) => {
   });
 };
 
-export { register, login, updateUser, autoLogin };
+module.exports = { register, login, updateUser, autoLogin };

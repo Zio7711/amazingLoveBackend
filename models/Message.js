@@ -1,31 +1,27 @@
-import mongoose from 'mongoose';
-
-const MessageSchema = new mongoose.Schema(
-  {
-    sender: {
-      type: String,
-      required: [true, 'Sender is required'],
-      trim: true,
+'use strict';
+const { Model } = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Message extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+    }
+  }
+  Message.init(
+    {
+      sender: DataTypes.INTEGER,
+      receiver: DataTypes.INTEGER,
+      content: DataTypes.STRING,
+      couple: DataTypes.INTEGER,
     },
-
-    receiver: {
-      type: String,
-      required: [true, 'Receiver is required'],
-      trim: true,
-    },
-
-    content: {
-      type: String,
-      required: [true, 'Content is required'],
-      trim: true,
-    },
-
-    couple: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Couple',
-    },
-  },
-  { timestamps: true }
-);
-
-export default mongoose.model('Message', MessageSchema);
+    {
+      sequelize,
+      modelName: 'Message',
+    }
+  );
+  return Message;
+};

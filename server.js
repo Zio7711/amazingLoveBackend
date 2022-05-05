@@ -1,30 +1,36 @@
-import 'express-async-errors';
+require('express-async-errors');
 
-import { Server } from 'socket.io';
-import authRouter from './routes/authRoutes.js';
-import authenticateUser from './middleware/auth.js';
-import bucketListItemRouter from './routes/bucketListRoutes.js';
-import connectDB from './db/connect.js';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
-import express from 'express';
-import http from 'http';
-import messageRouter from './routes/messageRoutes.js';
-import morgan from 'morgan';
-import notFoundMiddleware from './middleware/notFoundMiddleware.js';
-import { socketOnConnection } from './websocket/initializeSocket.js';
-import userRouter from './routes/userRoutes.js';
+const { Server } = require('socket.io');
+const connectDB = require('./db/connect.js');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const http = require('http');
+const express = require('express');
+const errorHandlerMiddleware = require('./middleware/errorHandlerMiddleware.js');
+const morgan = require('morgan');
+const notFoundMiddleware = require('./middleware/notFoundMiddleware.js');
 
-export const app = express();
+// const messageRouter = require('./routes/messageRoutes.js');
+// const { socketOnConnection } = require('./websocket/initializeSocket.js');
+// const userRouter = require('./routes/userRoutes.js');
+const authRouter = require('./routes/authRoutes.js');
+// const authenticateUser = require('./middleware/auth.js');
+
+// const bucketListItemRouter = require('./routes/bucketListRoutes.js');
+
+const app = express();
 app.use(express.static('public'));
-export const server = http.createServer(app);
-export const io = new Server(server, {
+const server = http.createServer(app);
+const io = new Server(server, {
   cors: {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   },
 });
+
+module.exports = {
+  io,
+};
 
 dotenv.config();
 
@@ -41,9 +47,9 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/message', authenticateUser, messageRouter);
-app.use('/api/v1/user', authenticateUser, userRouter);
-app.use('/api/v1/bucketList', authenticateUser, bucketListItemRouter);
+// app.use('/api/v1/message', authenticateUser, messageRouter);
+// app.use('/api/v1/user', authenticateUser, userRouter);
+// app.use('/api/v1/bucketList', authenticateUser, bucketListItemRouter);
 
 // middleware
 app.use(notFoundMiddleware);
@@ -53,8 +59,8 @@ const port = process.env.PORT || 5000;
 
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URI);
-    console.log('Connected to mongoDB');
+    await connectDB(process.env.POSTGRES_URI);
+    // console.log('Connected to Postgres');
 
     server.listen(port, '0.0.0.0', () => {
       console.log(`Server started on port ${port}...`);
@@ -66,7 +72,4 @@ const start = async () => {
 
 start();
 
-// socket.io functions
-
-socketOnConnection(io);
-// socketOnDisconnection(io);
+// socketOnConnection(io);

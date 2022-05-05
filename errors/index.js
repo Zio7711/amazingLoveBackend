@@ -1,5 +1,5 @@
-import BadRequestError from './badRequest.js';
-import NotFoundError from './notFound.js';
-import UnAuthenticatedError from './unauthenticated.js';
+const BadRequestError = require('./badRequest.js');
+const NotFoundError = require('./notFound.js');
+const UnAuthenticatedError = require('./unauthenticated.js');
 
-export { BadRequestError, NotFoundError, UnAuthenticatedError };
+module.exports = { BadRequestError, NotFoundError, UnAuthenticatedError };

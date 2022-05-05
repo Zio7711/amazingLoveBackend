@@ -1,24 +1,26 @@
-import mongoose from 'mongoose';
-
-const CoupleSchema = new mongoose.Schema({
-  girlfriend: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    unique: true,
-  },
-
-  boyfriend: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    unique: true,
-  },
-
-  bucketList: [
+'use strict';
+const { Model } = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Couple extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      this.hasMany(models.user, { onDelete: 'cascade' });
+    }
+  }
+  Couple.init(
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'BucketListItem',
+      girlfriend: DataTypes.INTEGER,
+      boyfriend: DataTypes.INTEGER,
     },
-  ],
-});
-
-export default mongoose.model('Couple', CoupleSchema);
+    {
+      sequelize,
+      modelName: 'Couple',
+    }
+  );
+  return Couple;
+};

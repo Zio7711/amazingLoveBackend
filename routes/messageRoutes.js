@@ -1,10 +1,10 @@
-import {
+const {
   createMessage,
   deleteMessage,
   getMessageByCoupleId,
-} from '../controller/messageController.js';
+} = require('../controller/messageController.js');
 
-import express from 'express';
+const express = require('express');
 
 const messageRouter = express.Router();
 
@@ -13,4 +13,4 @@ messageRouter.route('/:coupleId').get(getMessageByCoupleId);
 messageRouter.route('/new').post(createMessage);
 messageRouter.route('/:id').delete(deleteMessage);
 
-export default messageRouter;
+module.exports = messageRouter;

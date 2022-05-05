@@ -1,4 +1,4 @@
-import { StatusCodes } from 'http-status-codes';
+const { StatusCodes } = require('http-status-codes');
 
 const errorHandlerMiddleware = (err, req, res, next) => {
   console.log(err.message);
@@ -25,4 +25,4 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     message: defaultError.message,
   });
 };
-export default errorHandlerMiddleware;
+module.exports = errorHandlerMiddleware;

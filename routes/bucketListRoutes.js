@@ -1,12 +1,12 @@
-import {
+const {
   createBucketListItem,
   getAllBucketListItemsByCoupleId,
   updateBucketListItemById,
-} from '../controller/bucketListItemController.js';
+} = require('../controller/bucketListItemController.js');
 
-import express from 'express';
-import imageResize from '../middleware/imageResize.js';
-import multer from 'multer';
+const express = require('express');
+const imageResize = require('../middleware/imageResize.js');
+const multer = require('multer');
 
 const upload = multer({ dest: 'uploads/' });
 

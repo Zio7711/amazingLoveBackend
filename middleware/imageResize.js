@@ -1,10 +1,10 @@
-import fs from 'fs';
-import path from 'path';
-import sharp from 'sharp';
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
 
 const outputFolder = 'public/assets';
 
-export default async (req, res, next) => {
+module.export = async (req, res, next) => {
   const image = req.file;
 
   await sharp(image.path)
