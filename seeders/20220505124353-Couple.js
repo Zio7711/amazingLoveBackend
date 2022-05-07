@@ -16,9 +16,11 @@ module.exports = {
       "Couples",
       [
         {
-          _id: 1,
-          girlfriend: 1,
-          boyfriend: 2,
+          id: 1,
+          girlfriendId: 1,
+          boyfriendId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
       ],
       {}

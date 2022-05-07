@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('BucketLists', {
-      _id: {
+    await queryInterface.createTable("BucketLists", {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -23,11 +23,11 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
       },
-      couple: {
+      coupleId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Couples',
-          key: '_id',
+          model: "Couples",
+          key: "id",
         },
       },
       location: {
@@ -36,9 +36,18 @@ module.exports = {
       image: {
         type: Sequelize.TEXT,
       },
+
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('BucketLists');
+    await queryInterface.dropTable("BucketLists");
   },
 };

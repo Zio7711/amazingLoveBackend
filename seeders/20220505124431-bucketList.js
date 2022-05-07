@@ -15,15 +15,18 @@ module.exports = {
       "BucketLists",
       [
         {
-          _id: 1,
+          id: 1,
           title: "go shopping",
           description: "go shopping",
           isCompleted: false,
           date: new Date(),
-          couple: 1,
+          coupleId: 1,
           image:
             "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60",
           location: "Paris",
+
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
       ],
       {}

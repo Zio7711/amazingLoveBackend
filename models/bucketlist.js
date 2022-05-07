@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.Couple, {
-        foreignKey: "couple",
+        as: "couple",
+        foreignKey: "coupleId",
       });
     }
   }
@@ -20,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
       isCompleted: DataTypes.BOOLEAN,
       date: DataTypes.DATE,
-      couple: DataTypes.INTEGER,
+      coupleId: DataTypes.INTEGER,
       location: DataTypes.STRING,
       image: DataTypes.TEXT,
     },

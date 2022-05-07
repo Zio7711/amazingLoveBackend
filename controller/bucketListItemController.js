@@ -1,7 +1,7 @@
-import BucketListItem from '../models/BucketListItem.js';
-import Couple from '../models/Couple.js';
-import { NotFoundError } from '../errors/index.js';
-import { StatusCodes } from 'http-status-codes';
+import BucketListItem from "../models/BucketListItem.js";
+import Couple from "../models/Couple.js";
+import { NotFoundError } from "../errors/index.js";
+import { StatusCodes } from "http-status-codes";
 
 const createBucketListItem = async (req, res) => {
   const bucketListItem = req.body;
@@ -10,7 +10,7 @@ const createBucketListItem = async (req, res) => {
 
   // find couple by id and add bucketListItem to couple
   const couple = await Couple.findById(bucketListItem.couple);
-  couple.bucketList.push(bucketListItemCreated._id);
+  couple.bucketList.push(bucketListItemCreated.id);
   await couple.save();
 
   res.status(StatusCodes.CREATED).json({
@@ -24,7 +24,7 @@ const getAllBucketListItemsByCoupleId = async (req, res) => {
   const bucketList = await BucketListItem.find({ couple: coupleId });
 
   if (!bucketList) {
-    throw new NotFoundError('BucketListItems not found');
+    throw new NotFoundError("BucketListItems not found");
   }
 
   res.status(StatusCodes.OK).json({
@@ -33,7 +33,7 @@ const getAllBucketListItemsByCoupleId = async (req, res) => {
 };
 
 const updateBucketListItemById = async (req, res) => {
-  console.log('req', req.file);
+  console.log("req", req.file);
   const bucketListItem = req.body;
 
   const bucketListItemToBeUpdated = {
@@ -42,7 +42,7 @@ const updateBucketListItemById = async (req, res) => {
   };
 
   const bucketListItemUpdated = await BucketListItem.findByIdAndUpdate(
-    { _id: req.params.itemId },
+    { id: req.params.itemId },
     bucketListItemToBeUpdated,
     { new: true, validateBeforeSave: true }
   );

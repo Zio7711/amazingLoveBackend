@@ -16,10 +16,10 @@ module.exports = {
       "Messages",
       [
         {
-          _id: 1,
-          couple: 1,
-          sender: 1,
-          receiver: 2,
+          id: 1,
+          coupleId: 1,
+          senderId: 1,
+          receiverId: 2,
           content: "Hey, how are you?",
           createdAt: new Date(),
           updatedAt: new Date(),

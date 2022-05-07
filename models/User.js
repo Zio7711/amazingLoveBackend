@@ -10,16 +10,23 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.hasOne(models.Couple, {
-        foreignKey: "girlfriend",
+        foreignKey: "girlfriendId",
       });
+
       this.hasOne(models.Couple, {
-        foreignKey: "boyfriend",
+        foreignKey: "boyfriendId",
+      });
+
+      this.hasOne(models.User, {
+        as: "soulmate",
+        foreignKey: "soulmateId",
+      });
+
+      this.hasOne(models.Message, {
+        foreignKey: "senderId",
       });
       this.hasOne(models.Message, {
-        foreignKey: "sender",
-      });
-      this.hasOne(models.Message, {
-        foreignKey: "receiver",
+        foreignKey: "receiverId",
       });
     }
   }
@@ -28,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      soulmate: DataTypes.INTEGER,
+      soulmateId: DataTypes.INTEGER,
     },
     {
       sequelize,

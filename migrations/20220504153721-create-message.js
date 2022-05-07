@@ -1,38 +1,38 @@
-'use strict';
+"use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Messages', {
-      _id: {
+    await queryInterface.createTable("Messages", {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      sender: {
+      senderId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Users',
-          key: '_id',
+          model: "Users",
+          key: "id",
         },
       },
-      receiver: {
+      receiverId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Users',
-          key: '_id',
+          model: "Users",
+          key: "id",
         },
       },
       content: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      couple: {
+      coupleId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Couples',
-          key: '_id',
+          model: "Couples",
+          key: "id",
         },
         allowNull: false,
       },
@@ -47,6 +47,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Messages');
+    await queryInterface.dropTable("Messages");
   },
 };

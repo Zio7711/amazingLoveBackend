@@ -10,26 +10,30 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.User, {
-        foreignKey: "girlfriend",
+        as: "girlfriend",
+        foreignKey: "girlfriendId",
       });
 
       this.belongsTo(models.User, {
-        foreignKey: "boyfriend",
+        as: "boyfriend",
+        foreignKey: "boyfriendId",
       });
 
       this.hasMany(models.Message, {
-        foreignKey: "couple",
+        as: "messages",
+        foreignKey: "coupleId",
       });
 
       this.hasMany(models.BucketList, {
-        foreignKey: "couple",
+        as: "bucketLists",
+        foreignKey: "coupleId",
       });
     }
   }
   Couple.init(
     {
-      girlfriend: DataTypes.INTEGER,
-      boyfriend: DataTypes.INTEGER,
+      girlfriendId: DataTypes.INTEGER,
+      boyfriendId: DataTypes.INTEGER,
     },
     {
       sequelize,

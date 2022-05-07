@@ -33,7 +33,7 @@ const seedBucketListItem = async () => {
 
     // find couple by id and add bucketListItem to couple
     const couple = await Couple.findById(seed.couple);
-    couple.bucketList.push(bucketListItemCreated._id);
+    couple.bucketList.push(bucketListItemCreated.id);
     await couple.save();
   });
 
