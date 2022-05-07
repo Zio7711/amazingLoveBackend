@@ -1,8 +1,6 @@
 const { BadRequestError, UnAuthenticatedError } = require("../errors/index.js");
 
-// const Couples = require('../models/Couple.js');
 const { StatusCodes } = require("http-status-codes");
-// const Users  = require('../models/User.js');
 const models = require("../models/index.js");
 const {
   createJWT,

@@ -1,10 +1,13 @@
-import { getCoupleById, getUserById } from '../controller/userController.js';
+const {
+  getCoupleById,
+  getUserById,
+} = require("../controller/userController.js");
 
-import express from 'express';
+const express = require("express");
 
 const userRouter = express.Router();
 
-userRouter.route('/:id').get(getUserById);
-userRouter.route('/couple/:id').get(getCoupleById);
+userRouter.route("/:id").get(getUserById);
+userRouter.route("/couple/:id").get(getCoupleById);
 
-export default userRouter;
+module.exports = userRouter;
