@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -13,8 +13,14 @@ module.exports = {
      */
 
     await queryInterface.bulkInsert(
-      'Couples',
-      [{ girlfriend: 6, boyfriend: 7 }],
+      "Couples",
+      [
+        {
+          _id: 1,
+          girlfriend: 1,
+          boyfriend: 2,
+        },
+      ],
       {}
     );
   },
@@ -26,7 +32,7 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('Couples', null, {
+    await queryInterface.bulkDelete("Couples", null, {
       cascade: true,
     });
   },
