@@ -1,27 +1,24 @@
-import BucketListItem from "../models/BucketListItem.js";
-import Couple from "../models/Couple.js";
-import { NotFoundError } from "../errors/index.js";
-import { StatusCodes } from "http-status-codes";
+const { NotFoundError } = require("../errors/index.js");
+const { StatusCodes } = require("http-status-codes");
+
+const models = require("../models/index.js");
+const { BucketList, Couple } = models;
 
 const createBucketListItem = async (req, res) => {
-  const bucketListItem = req.body;
-  console.log(bucketListItem.couple);
-  const bucketListItemCreated = await BucketListItem.create(bucketListItem);
+  const bucketList = req.body;
 
-  // find couple by id and add bucketListItem to couple
-  const couple = await Couple.findById(bucketListItem.couple);
-  couple.bucketList.push(bucketListItemCreated.id);
-  await couple.save();
+  const bucketListItemCreated = await BucketList.create(bucketList);
 
   res.status(StatusCodes.CREATED).json({
     bucketListItemCreated,
-    couple,
   });
 };
 
 const getAllBucketListItemsByCoupleId = async (req, res) => {
   const coupleId = req.params.coupleId;
-  const bucketList = await BucketListItem.find({ couple: coupleId });
+  const bucketList = await BucketList.findAll({
+    where: { coupleId },
+  });
 
   if (!bucketList) {
     throw new NotFoundError("BucketListItems not found");
@@ -41,10 +38,11 @@ const updateBucketListItemById = async (req, res) => {
     image: req.file.filename,
   };
 
-  const bucketListItemUpdated = await BucketListItem.findByIdAndUpdate(
-    { id: req.params.itemId },
+  const bucketListItemUpdated = await BucketList.update(
     bucketListItemToBeUpdated,
-    { new: true, validateBeforeSave: true }
+    {
+      where: { id: req.params.id },
+    }
   );
 
   res.status(StatusCodes.OK).json({
@@ -52,7 +50,7 @@ const updateBucketListItemById = async (req, res) => {
   });
 };
 
-export {
+module.exports = {
   createBucketListItem,
   getAllBucketListItemsByCoupleId,
   updateBucketListItemById,

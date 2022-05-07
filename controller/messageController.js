@@ -1,22 +1,32 @@
-import { BadRequestError } from '../errors/index.js';
-import Messages from '../models/Message.js';
-import { StatusCodes } from 'http-status-codes';
+const { BadRequestError } = require("../errors/index.js");
+const { StatusCodes } = require("http-status-codes");
+
+const models = require("../models/index.js");
+const { Message } = models;
 
 const createMessage = async (req, res) => {
-  const { sender, receiver, content, couple } = req.body;
+  const { senderId, receiverId, content, coupleId } = req.body;
 
   // check if required fields are submitted
-  if (!sender || !receiver || !content | !couple) {
-    throw new BadRequestError('Missing required fields');
+  if (!senderId || !receiverId || !content | !coupleId) {
+    throw new BadRequestError("Missing required fields");
   }
 
-  const message = await Messages.create({ sender, receiver, content, couple });
+  if (senderId != req.user.userId)
+    throw new UnAuthenticatedError("Invalid credentials");
+
+  const message = await Message.create({
+    senderId,
+    receiverId,
+    content,
+    coupleId,
+  });
 
   res.status(StatusCodes.CREATED).json({ message });
 };
 
 const deleteMessage = async (req, res) => {
-  res.send('createMessage');
+  res.send("delete message not implemented");
 };
 
 // This route is not used yet
@@ -33,14 +43,16 @@ const deleteMessage = async (req, res) => {
 // };
 
 const getMessageByCoupleId = async (req, res) => {
-  const messages = await Messages.find({ couple: req.params.coupleId }).sort({
-    createdAt: -1,
+  const messages = await Message.findAll({
+    where: { coupleId: req.params.coupleId },
+
+    order: [["createdAt", "ASC"]],
   });
 
   res.status(StatusCodes.OK).json({ messages });
 };
 
-export {
+module.exports = {
   createMessage,
   deleteMessage,
   //  getMessageByUser,

@@ -10,13 +10,13 @@ const errorHandlerMiddleware = require("./middleware/errorHandlerMiddleware.js")
 const morgan = require("morgan");
 const notFoundMiddleware = require("./middleware/notFoundMiddleware.js");
 
-// const messageRouter = require('./routes/messageRoutes.js');
+const messageRouter = require("./routes/messageRoutes.js");
 // const { socketOnConnection } = require('./websocket/initializeSocket.js');
 const userRouter = require("./routes/userRoutes.js");
 const authRouter = require("./routes/authRoutes.js");
 const authenticateUser = require("./middleware/auth.js");
 
-// const bucketListItemRouter = require('./routes/bucketListRoutes.js');
+const bucketListItemRouter = require("./routes/bucketListRoutes.js");
 
 const app = express();
 app.use(express.static("public"));
@@ -47,9 +47,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRouter);
-// app.use("/api/v1/message", authenticateUser, messageRouter);
+app.use("/api/v1/message", authenticateUser, messageRouter);
 app.use("/api/v1/user", authenticateUser, userRouter);
-// app.use('/api/v1/bucketList', authenticateUser, bucketListItemRouter);
+app.use("/api/v1/bucketList", authenticateUser, bucketListItemRouter);
 
 // middleware
 app.use(notFoundMiddleware);
