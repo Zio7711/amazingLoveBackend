@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       date: DataTypes.DATE,
       coupleId: DataTypes.INTEGER,
       location: DataTypes.STRING,
-      image: DataTypes.TEXT,
+      image: DataTypes.BLOB,
+      imageURL: DataTypes.STRING,
     },
     {
       sequelize,

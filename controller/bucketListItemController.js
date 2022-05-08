@@ -18,6 +18,10 @@ const getAllBucketListItemsByCoupleId = async (req, res) => {
   const coupleId = req.params.coupleId;
   const bucketList = await BucketList.findAll({
     where: { coupleId },
+    attributes: {
+      exclude: ["image"],
+    },
+    order: [["createdAt", "DESC"]],
   });
 
   if (!bucketList) {
@@ -30,28 +34,64 @@ const getAllBucketListItemsByCoupleId = async (req, res) => {
 };
 
 const updateBucketListItemById = async (req, res) => {
-  console.log("req", req.file);
   const bucketListItem = req.body;
+
+  const imageFile = req.file.buffer;
+
+  // const imageFile = fs.readFileSync(req.file.path);
+
+  const imageURL = `${process.env.BASEURL}/bucketList/${
+    req.params.itemId
+  }/image?${Date.now()}`;
 
   const bucketListItemToBeUpdated = {
     ...bucketListItem,
-    image: req.file.filename,
+    image: imageFile,
+    imageURL,
   };
 
   const bucketListItemUpdated = await BucketList.update(
     bucketListItemToBeUpdated,
     {
-      where: { id: req.params.id },
+      where: { id: req.params.itemId },
+      returning: true,
+      plain: true,
     }
   );
 
+  const bucketListItemUpdatedData = bucketListItemUpdated[1].dataValues;
+  console.log("bucketListItemUpdatedData", bucketListItemUpdatedData);
+
   res.status(StatusCodes.OK).json({
-    bucketListItemUpdated,
+    bucketListItemUpdated: {
+      id: bucketListItemUpdatedData.id,
+      title: bucketListItemUpdatedData.title,
+      description: bucketListItemUpdatedData.description,
+      isCompleted: bucketListItemUpdatedData.isCompleted,
+      date: bucketListItemUpdatedData.date,
+      coupleId: bucketListItemUpdatedData.coupleId,
+      location: bucketListItemUpdatedData.location,
+      imageURL: bucketListItemUpdatedData.imageURL,
+    },
   });
+};
+
+const getImage = async (req, res) => {
+  const bucketListItem = await BucketList.findOne({
+    where: { id: req.params.itemId },
+    attributes: ["image"],
+  });
+  if (!bucketListItem) {
+    throw new NotFoundError("BucketListItem not found");
+  }
+  const image = bucketListItem.image;
+  res.setHeader("Content-Type", "image/jpg");
+  res.send(image);
 };
 
 module.exports = {
   createBucketListItem,
   getAllBucketListItemsByCoupleId,
   updateBucketListItemById,
+  getImage,
 };

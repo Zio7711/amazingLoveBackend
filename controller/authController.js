@@ -44,8 +44,10 @@ const login = async (req, res) => {
 
   // retrieve user from db
 
+  //include soulmate
   const user = await User.findOne({
     where: { email },
+    include: "soulmate",
   });
 
   if (!user) throw new UnAuthenticatedError("Invalid credentials");
@@ -61,6 +63,8 @@ const login = async (req, res) => {
       id: user.id,
       name: user.name,
       email: user.email,
+      soulmateId: user.soulmateId,
+      soulmate: user.soulmate,
     },
     token,
   });
@@ -138,6 +142,8 @@ const autoLogin = async (req, res) => {
       id: user.id,
       name: user.name,
       email: user.email,
+      soulmateId: user.soulmateId,
+      soulmate: user.soulmate,
     },
   });
 };

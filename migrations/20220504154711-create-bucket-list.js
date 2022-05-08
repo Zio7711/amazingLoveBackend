@@ -34,7 +34,10 @@ module.exports = {
         type: Sequelize.STRING,
       },
       image: {
-        type: Sequelize.TEXT,
+        type: Sequelize.BLOB,
+      },
+      imageURL: {
+        type: Sequelize.STRING,
       },
 
       createdAt: {

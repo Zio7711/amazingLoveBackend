@@ -11,7 +11,7 @@ const morgan = require("morgan");
 const notFoundMiddleware = require("./middleware/notFoundMiddleware.js");
 
 const messageRouter = require("./routes/messageRoutes.js");
-// const { socketOnConnection } = require('./websocket/initializeSocket.js');
+const { socketOnConnection } = require("./websocket/initializeSocket.js");
 const userRouter = require("./routes/userRoutes.js");
 const authRouter = require("./routes/authRoutes.js");
 const authenticateUser = require("./middleware/auth.js");
@@ -72,4 +72,4 @@ const start = async () => {
 
 start();
 
-// socketOnConnection(io);
+socketOnConnection(io);

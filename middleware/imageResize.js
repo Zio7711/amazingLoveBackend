@@ -11,7 +11,7 @@ const imageResizeCallBack = async (req, res, next) => {
     .jpeg({ quality: 50 })
     .toFile(path.resolve(outputFolder, image.filename + "_full.jpg"));
 
-  fs.unlinkSync(image.path);
+  // fs.unlinkSync(image.path);
   req.image = image.filename;
 
   next();
