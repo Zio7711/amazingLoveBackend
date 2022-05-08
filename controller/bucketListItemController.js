@@ -2,6 +2,7 @@ const { NotFoundError } = require("../errors/index.js");
 const { StatusCodes } = require("http-status-codes");
 
 const models = require("../models/index.js");
+const sharp = require("sharp");
 const { BucketList, Couple } = models;
 
 const createBucketListItem = async (req, res) => {
@@ -60,7 +61,6 @@ const updateBucketListItemById = async (req, res) => {
   );
 
   const bucketListItemUpdatedData = bucketListItemUpdated[1].dataValues;
-  console.log("bucketListItemUpdatedData", bucketListItemUpdatedData);
 
   res.status(StatusCodes.OK).json({
     bucketListItemUpdated: {
@@ -81,12 +81,31 @@ const getImage = async (req, res) => {
     where: { id: req.params.itemId },
     attributes: ["image"],
   });
+
   if (!bucketListItem) {
     throw new NotFoundError("BucketListItem not found");
   }
   const image = bucketListItem.image;
+
+  //shrink image size to speed up loading images
+  const resizedImage = await sharp(image).jpeg({ quality: 10 }).toBuffer();
+
   res.setHeader("Content-Type", "image/jpg");
-  res.send(image);
+  res.send(resizedImage);
+};
+
+const deleteBucketListItemById = async (req, res) => {
+  const bucketListItem = await BucketList.destroy({
+    where: { id: req.params.itemId },
+  });
+
+  if (!bucketListItem) {
+    throw new NotFoundError("BucketListItem not found");
+  }
+
+  res.status(StatusCodes.OK).json({
+    bucketListItemId: Number(req.params.itemId),
+  });
 };
 
 module.exports = {
@@ -94,4 +113,5 @@ module.exports = {
   getAllBucketListItemsByCoupleId,
   updateBucketListItemById,
   getImage,
+  deleteBucketListItemById,
 };
